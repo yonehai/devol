@@ -49,7 +49,7 @@ class DEvol:
                     will be stored in
         """
         self.genome_handler = genome_handler
-        self.datafile = data_path or (datetime.now().ctime() + '.csv')
+        self.datafile = data_path or (datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '.csv')
         self._bssf = -1
 
         if os.path.isfile(data_path) and os.stat(data_path).st_size > 1:
@@ -166,7 +166,7 @@ class DEvol:
             ]
         }
 
-        if self.x_val is not None:
+        if self.x_val != None:
             fit_params['validation_data'] = (self.x_val, self.y_val)
         try:
             model.fit(**fit_params)
@@ -186,9 +186,9 @@ class DEvol:
             writer.writerow(row)
 
         met = loss if self._metric == 'loss' else accuracy
-        if (self._bssf is -1 or
+        if (self._bssf == -1 or
                 self._metric_op(met, self._bssf) and
-                accuracy is not 0):
+                accuracy != 0):
             try:
                 os.remove('best-model.h5')
             except OSError:
